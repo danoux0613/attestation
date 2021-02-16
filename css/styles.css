@@ -1,0 +1,8 @@
+@media print {
+    body {
+        margin: 100px;
+    }
+    p {
+        color: red;
+    }
+}

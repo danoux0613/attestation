@@ -1,0 +1,6 @@
+{
+    "name": "root/project-ecole",
+    "require": {
+        "mpdf/mpdf": "^8.0"
+    }
+}

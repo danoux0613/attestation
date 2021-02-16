@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr" class="fontawesome-i2svg-active fontawesome-i2svg-complete">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://media.interieur.gouv.fr/attestation-couvre-feu-covid-19/apple-touch-icon.fdeabd24.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://media.interieur.gouv.fr/attestation-couvre-feu-covid-19/favicon-32x32.623384d0.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://media.interieur.gouv.fr/attestation-couvre-feu-covid-19/favicon-16x16.a4687270.png">
+    <link rel="manifest" href="https://media.interieur.gouv.fr/attestation-couvre-feu-covid-19/favicons/site.webmanifest">
+    <link rel="mask-icon" href="https://media.interieur.gouv.fr/attestation-couvre-feu-covid-19/safari-pinned-tab.1551797e.svg" color="#21bf73">
+    <title>Attestation de déplacement dérogatoire</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- debut de l'entete -->
+    <header role="banner" class="wrapper">
+        <!-- debut benniere "Ministère de l'intérieur. Liberté, égalité, fraternité." -->
+        <picture>
+            <source srcset="img/MIN_Interieur_dark.svg" media="(prefers-color-scheme: dark)">
+            <img src="img/MIN_Interieur.svg" alt="Ministère de l&#39;intérieur. Liberté, égalité, fraternité." class="logo" role="presentation" aria-hidden="true">
+        </picture>
+        <!-- fin banniere "Ministère de l'intérieur. Liberté, égalité, fraternité." -->
+        <div>
+            <h1 class="flex flex-wrap">
+                <span class="covid-title"> COVID-21 </span>
+                <span class="covid-subtitle"> Gestionaire attestation de déplacement <br> durant les horaires du couvre-feu </span>
+
+            </h1>
+        </div>
+    </header>
+    <!-- fin de l'entete -->
+    <form>
+        <div class="mb-3">
+            <label for="exampleInputimmatricule1" class="form-label">immatricule address</label>
+            <input type="number" class="form-control" id="exampleInputimmatricule1" aria-describedby="immatriculeHelp" maxlength="7">
+            <div id="immatriculeHelp" class="form-text">Votre immatricule est votre identifiant de policier(e) unique. <br>il est composée de 7 caractères</div>
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input type="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <div>
+        <p class="github"> Le code source de ce service est consultable sur <a href="https://github.com/danoux0613/attestation" class="github-link">GitHub</a>. </p>
+        <p class="label-mi"> Ministère de l'Intérieur - DNUM - SDIT </p>
+        <picture class="center">
+            <source srcset="/attestation-couvre-feu-covid-19/logo_dnum_dark.0fe33c5b.svg" media="(prefers-color-scheme: dark)"> <img class="center" src="img/logo_dnum..svg" alt="logo dnum"> </picture>
+    </div>
+    </main>
+    <footer role="contentinfo" class="main-footer">
+        <div class="footer-links"> <a href="#" title="Confidentialité - nouvelle page" target="_blank" class="footer-line footer-link">Confidentialité</a> <a href="#" title="Mentions légales - nouvelle page" target="_blank" class="footer-line footer-link">Mentions légales</a>
+            <a href="#+" title="Information du gouvernement sur le Covid-19 - nouvelle page" target="_blank" class="footer-line footer-link">Informations du gouvernement sur le Covid-19</a>
+            <div class="footer-line">Plus d’infos au <a class="num-08" href="tel:0800130000" title="Numéro vert - appel gratuit depuis un poste fixe en France">0 800 130 000</a></div>
+            <p class="footer-line" id="version">2021 - 1.1.5</p>
+        </div>
+    </footer>
+    <div class="alert alert-info d-none" id="update-alert"> Une nouvelle version est disponible. Cliquer sur le bouton pour l'obtenir.
+        <p class="text-right"> <button id="reload-btn" class="btn btn-info">Mettre à jour</button> </p>
+    </div>
+</body>
+
+</html>
