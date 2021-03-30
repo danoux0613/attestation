@@ -1,6 +1,8 @@
 <?php
-// L'extention mpdf a besoin de ce fichier pour fontioner alors ona oute une condition 
+// L'extention mpdf a besoin de ce fichier pour fontioner alors on ajoute une condition 
 require_once __DIR__ . '/vendor/autoload.php';
+
+//on ajoute une condition pour executer la suite du script 
 if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['birthday']) && isset($_POST['placeofbirth']) && isset($_POST['address']) && isset($_POST['heuresortie']) && isset($_POST['city']) && isset($_POST['zipcode']) && isset($_POST['datesortie'])) {
     date_default_timezone_set('Europe/Paris');
     // ici je declare la majorité de mes variales
@@ -40,8 +42,9 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['bir
     $dbh = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_database, $db_user, $db_mdp);
 
     //la requete a effectuer a la base de données 
-    
-    $query = "INSERT INTO attestation (`Id`, `Prenom`, `Nom`, `DateDeNaissance`, `Lieu de naissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) VALUES (NULL,".$_POST['firstname'].", ".$_POST['lastname']." ".$_POST['birthday'].", ".$_POST['firstname'].", ".$_POST['firstname'].", ".$_POST['firstname'].", ".$_POST['firstname'].", ".$_POST['firstname'].", '00:02:53', 'travail');";
+
+    $query = "INSERT INTO attestation (`Id`, `Prenom`, `Nom`, `DateDeNaissance`, `Lieu de naissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) 
+    VALUES (NULL," . $_POST['firstname'] . ", " . $_POST['lastname'] . " " . $_POST['birthday'] . ", ". $_POST['placeofbirth'] . ", " . $_POST['address'] . ", " . $_POST['city'] . ", " . $_POST['zipcode'] . ", " . $_POST['datesortie'] . ", '00:02:53', 'travail');";
 
     //enregistrement de la requête 
     $stmt = $dbh->prepare($query);
@@ -102,26 +105,36 @@ d’urgence sanitaire<sup>1</sup>&nbsp; :</p><br>';
     } else {
         $data .= '<p style="">' . $no_checked . 'Déplacements pour motif familial impérieux, pour l’assistance aux personnes vulnérables<br> ou précaires ou pour la garde d’enfants</p>';
     }
+
+
     if (isset($_POST["checkbox-handicap"])) {
         $data .= '<p style="">' . $checked . 'Déplacements des personnes en situation de handicap et de leur accompagnant</p>';
     } else {
         $data .= '<p style="">' . $no_checked . 'Déplacements des personnes en situation de handicap et de leur accompagnant</p>';
     }
+
+
     if (isset($_POST["checkbox-convocation"])) {
         $data .= '<p style="">' . $checked . 'Déplacements pour répondre à une convocation judiciaire ou administrative</p>';
     } else {
         $data .= '<p style="">' . $no_checked . 'Déplacements pour répondre à une convocation judiciaire ou administrative</p>';
     }
+
+
     if (isset($_POST["checkbox-missions"])) {
         $data .= '<p style="">' . $checked . 'Déplacements pour participer à des missions d’intérêt général sur demande de l’autorité<br> administrative</p>';
     } else {
         $data .= '<p style="">' . $no_checked . 'Déplacements pour participer à des missions d’intérêt général sur demande de l’autorité<br> administrative</p>';
     }
+
+
     if (isset($_POST["checkbox-transits"])) {
         $data .= '<p style="">' . $checked . 'Déplacements liés à des transits ferroviaires, aériens ou en bus pour des déplacements de<br> longues distances</p>';
     } else {
         $data .= '<p style="">' . $no_checked . 'Déplacements liés à des transits ferroviaires, aériens ou en bus pour des déplacements de<br> longues distances</p>';
     }
+
+
     if (isset($_POST["checkbox-animaux"])) {
         $data .= '<p style="">' . $checked . 'Déplacements brefs, dans un rayon maximal d’un kilomètre autour du domicile pour les<br> besoins des animaux de compagnie</p>';
     } else {
@@ -144,7 +157,6 @@ entre dans le champ de l’une de ces exceptions.</p>';
 
     //Sortie des données et les Ouvrir sur le navigateurs.
     $mpdf->Output('attestation-' . $datenow . '.pdf', 'D');
-}
-else {
-    echo'<h1 style="text-align:center; font-family:Arial, sans-serif;">Oups ! rien reçu du formulaire...</h1>';
+} else {
+    echo '<h1 style="text-align:center; font-family:Arial, sans-serif;">Oups ! rien reçu du formulaire...</h1>';
 }
