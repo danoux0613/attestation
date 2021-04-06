@@ -2,10 +2,21 @@
 // L'extention mpdf a besoin de ce fichier pour fontioner alors on ajoute une condition 
 require_once __DIR__ . '/vendor/autoload.php';
 
+
 //on ajoute une condition pour executer la suite du script 
-if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['birthday']) && isset($_POST['placeofbirth']) && isset($_POST['address']) && isset($_POST['heuresortie']) && isset($_POST['city']) && isset($_POST['zipcode']) && isset($_POST['datesortie'])) {
+if (
+    isset($_POST['firstname']) &&
+    isset($_POST['lastname']) &&
+    isset($_POST['birthday']) &&
+    isset($_POST['placeofbirth']) &&
+    isset($_POST['address']) &&
+    isset($_POST['heuresortie']) &&
+    isset($_POST['city']) &&
+    isset($_POST['zipcode']) &&
+    isset($_POST['datesortie'])
+) {
     date_default_timezone_set('Europe/Paris');
-    // ici je declare la majorité de mes variales
+    // ici je declare la majorité de mes varibles
     $datenow = date("Y-m-j_H-i");
     $spacecenter = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
     $firstname = $_POST['firstname'];
@@ -43,15 +54,22 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['bir
 
     //la requete a effectuer a la base de données 
 
-    $query = "INSERT INTO attestation (`Id`, `Prenom`, `Nom`, `DateDeNaissance`, `Lieu de naissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) 
-    VALUES (NULL," . $_POST['firstname'] . ", " . $_POST['lastname'] . " " . $_POST['birthday'] . ", ". $_POST['placeofbirth'] . ", " . $_POST['address'] . ", " . $_POST['city'] . ", " . $_POST['zipcode'] . ", " . $_POST['datesortie'] . ", '00:02:53', 'travail');";
+    $query = "INSERT INTO attestation (`Id`, `Prenom`, `Nom`, `DateDeNaissance`, `Lieu de naissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) VALUES (NULL, 
+    :firstname,:lastname,:birthday,:placeofbirth,:address,:city,:zipcode,:datesortie, '00:02:53', 'travail');";
 
     //enregistrement de la requête 
     $stmt = $dbh->prepare($query);
-
+    $stmt->bindParam(':firstname', $_POST['firstname']);
+    $stmt->bindParam(':lastname', $_POST['lastname']);
+    $stmt->bindParam(':birthday', $_POST['birthday']);
+    $stmt->bindParam(':placeofbirth', $$_POST['placeofbirth']);
+    $stmt->bindParam(':address', $_POST['address']);
+    $stmt->bindParam(':city', $_POST['city']);
+    $stmt->bindParam(':zipcode', $_POST['zipcode']);
+    $stmt->bindParam(':datesortie', $_POST['datesortie']);
 
     //execution de la requête
-    $stmt->execute();
+    print_r($stmt->execute());
 
     //recupération du résultat de la requête 
     $response = $stmt->fetchAll(PDO::FETCH_CLASS);
@@ -67,7 +85,9 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['bir
 
 
     // Créer une nouvelle instance PDF
-    $mpdf = new \Mpdf\Mpdf();
+    $mpdf = new \Mpdf\Mpdf([
+        'default_font' => 'SF UI Display Light'
+    ]);
 
     $checked = '<input type="checkbox" checked="yes"/>';
     $no_checked = '<input type="checkbox"/>';
@@ -77,10 +97,11 @@ if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['bir
 
     // Ici on lui ajoute des "donnée"
     $data .= "<p></p>";
-    $data .= '<h2 style="text-align: center;font-family:Georgia, serif;">ATTESTATION DE DÉPLACEMENT DÉROGATOIRE <br>DURANT LES HORAIRES DU COUVRE-FEU</h2>
+    $data .= '<h2>ATTESTATION DE DÉPLACEMENT DÉROGATOIRE</h2><h4>DURANT LES HORAIRES DU COUVRE-FEU</h4>
+
 <p style="text-align: left; font-size:12px">En application de l’article 4 du décret n° 2020-1310 du 29 octobre 2020 prescrivant les mesures générales<br>
 nécessaires pour faire face à l’épidémie de COVID-19 dans le cadre de l’état d’urgence sanitaire</p>';
-    '<body style="margin=500px;">';
+    '<body >';
     $data .= 'Mme/M. :' . $firstname . " " . $lastname . '<br />';
     $data .= 'Né(e) le :' . $birthday . $spacecenter . 'à: ' . $placeofbirth . '<br />';
     $data .= 'Demeurant :' . $address . " " . $zipcode . '<br />';
@@ -142,12 +163,14 @@ d’urgence sanitaire<sup>1</sup>&nbsp; :</p><br>';
     }
 
 
-    $data .= 'Fait à :' . $city . '<br />';
-    $data .= 'Le :' . $datesortie . $spacecenter . 'à :' . $heuresortie . '<br />';
+    $data .= '<p>Fait à :' . $city . '</p><br />';
+    $data .= '<p>Le :' . $datesortie . $spacecenter . 'à :' . $heuresortie . '<br />';
     $data .= '<p style="text-align:left">(Date et heure de début de sortie à mentionner obligatoirement)</p><br>';
     $data .= '<p style="text-align:left;font-size:11px;margin-left:80px;"><sup>1</sup>&nbsp; Les personnes souhaitant bénéficier de l’une de ces exceptions doivent se munir s’il y a lieu, lors de leurs
 déplacements hors de leur domicile, d’un document leur permettant de justifier que le déplacement considéré
 entre dans le champ de l’une de ces exceptions.</p>';
+
+    $mpdf->SetTitle('COVID-19 - Déclaration de déplacement');
 
     $stylesheet = file_get_contents('css/styles.css');
     $mpdf->WriteHTML($stylesheet, \Mpdf\HTMLParserMode::HEADER_CSS);

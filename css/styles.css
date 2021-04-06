@@ -1,8 +1,27 @@
 @media print {
+    @font-face {
+        font-family: 'SF UI Display Light';
+        font-weight: normal;
+        src: local('SF UI Display Light'), url('sf-ui-display-light-58646b33e0551.woff') format('woff');
+    }
     body {
-        margin: 100px;
+        margin: 200px;
+        font-family: system-ui;
     }
     p {
-        color: #000;
+        color: pink;
+        font-family: 'SF UI Display Light';
+        font-weight: normal;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        color: pink;
+        font-family: 'SF UI Display Light';
+        font-weight: normal;
+        text-align: center;
     }
 }
