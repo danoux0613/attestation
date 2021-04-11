@@ -41,49 +41,6 @@ if (
     if (isset($_POST["checkbox-animaux"])) $motif_sorti .= $_POST["checkbox-animaux"] . ",";
 
 
-    //Connecting to sql db.
-    //les informations de connexion a la base
-
-    $db_host = "localhost:3306"; //a verifier 3306 pour MySQL ou 3307 pour MariaDE 
-    $db_user = "daniel"; //"root"
-    $db_mdp = "EQuU1zodeqEhzlc3paSUNBbrUB"; //->laisser vide si le user root n'a pas de mdp
-    $db_database = "corona"; //->"corona"
-
-    // initialisation de l'objet PDO pour lancer la connexion
-    $dbh = new PDO('mysql:host=' . $db_host . ';dbname=' . $db_database, $db_user, $db_mdp);
-
-    //la requete a effectuer a la base de données 
-
-    $query = "INSERT INTO attestation (`Id`, `Prenom`, `Nom`, `DateDeNaissance`, `Lieu de naissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) VALUES (NULL, 
-    :firstname,:lastname,:birthday,:placeofbirth,:address,:city,:zipcode,:datesortie, '00:02:53', 'travail');";
-
-    //enregistrement de la requête 
-    $stmt = $dbh->prepare($query);
-    $stmt->bindParam(':firstname', $_POST['firstname']);
-    $stmt->bindParam(':lastname', $_POST['lastname']);
-    $stmt->bindParam(':birthday', $_POST['birthday']);
-    $stmt->bindParam(':placeofbirth', $$_POST['placeofbirth']);
-    $stmt->bindParam(':address', $_POST['address']);
-    $stmt->bindParam(':city', $_POST['city']);
-    $stmt->bindParam(':zipcode', $_POST['zipcode']);
-    $stmt->bindParam(':datesortie', $_POST['datesortie']);
-
-    //execution de la requête
-    print_r($stmt->execute());
-
-    //recupération du résultat de la requête 
-    $response = $stmt->fetchAll(PDO::FETCH_CLASS);
-
-
-    //effacer le contenu de l'objet
-
-    $dbh = null;
-
-    //$connect = mysqli_connect("localhost:3306","root","","corona");
-    //Sending form data to sql db.
-    //$checkerror=mysqli_query($connect,"INSERT INTO attestation (`Id`, `Prenom`, `Nom`, `DateDeNaissance`, `Lieu de naissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) VALUES (NULL,".$_POST['firstname'].", ".$_POST['lastname']." ".$_POST['birthday'].", ".$_POST['firstname'].", ".$_POST['firstname'].", ".$_POST['firstname'].", ".$_POST['firstname'].", ".$_POST['firstname'].", '00:02:53', 'travail');");
-
-
     // Créer une nouvelle instance PDF
     $mpdf = new \Mpdf\Mpdf([
         'default_font' => 'SF UI Display Light'
@@ -102,9 +59,10 @@ if (
 <p style="text-align: left; font-size:12px">En application de l’article 4 du décret n° 2020-1310 du 29 octobre 2020 prescrivant les mesures générales<br>
 nécessaires pour faire face à l’épidémie de COVID-19 dans le cadre de l’état d’urgence sanitaire</p>';
     '<body >';
-    $data .= 'Mme/M. :' . $firstname . " " . $lastname . '<br />';
-    $data .= 'Né(e) le :' . $birthday . $spacecenter . 'à: ' . $placeofbirth . '<br />';
-    $data .= 'Demeurant :' . $address . " " . $zipcode . '<br />';
+    $data .= '<p>Mme/M. :' . $firstname  . " " . $lastname . '</p>';
+    $data .= '<p>Né(e) le :' . $birthday . $spacecenter . 'à:' . $placeofbirth . '</p>';
+    $data .= '<p>Demeurant :' . $address . " " . $zipcode . '</p>';
+
     $data .= '<p>certifie que mon déplacement est lié au motif suivant (cocher la case) autorisé en application des<br>
 mesures générales nécessaires pour faire face à l’épidémie de COVID-19 dans le cadre de l’état<br>
 d’urgence sanitaire<sup>1</sup>&nbsp; :</p><br>';
@@ -180,6 +138,33 @@ entre dans le champ de l’une de ces exceptions.</p>';
 
     //Sortie des données et les Ouvrir sur le navigateurs.
     $mpdf->Output('attestation-' . $datenow . '.pdf', 'D');
+
+    $pdo = new PDO('mysql:host=localhost:3306;dbname=corona', 'daniel', 'EQuU1zodeqEhzlc3paSUNBbrUB');
+    $data = [
+        'firstname' => htmlspecialchars($_POST['firstname']),
+        'lastname' => htmlspecialchars($_POST['lastname']),
+        'birthday' => htmlspecialchars($_POST['birthday']),
+        'placeofbirth' => htmlspecialchars($_POST['placeofbirth']),
+        'address' => htmlspecialchars($_POST['address']),
+        'city' => htmlspecialchars($_POST['city']),
+        'zipcode' => htmlspecialchars($_POST['zipcode']),
+        'datesortie' => htmlspecialchars($_POST['datesortie']),
+        'heuresortie' => htmlspecialchars($_POST['heuresortie']),
+        'checkbox' => ''
+    ];
+
+    if (isset($_POST["checkbox-travail"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-travail"]) . ",";
+    if (isset($_POST["checkbox-sante"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-sante"]) . ",";
+    if (isset($_POST["checkbox-famille"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-famille"]) . ",";
+    if (isset($_POST["checkbox-handicap"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-handicap"]) . ",";
+    if (isset($_POST["checkbox-convocation"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-convocation"]) . ",";
+    if (isset($_POST["checkbox-missions"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-missions"]) . ",";
+    if (isset($_POST["checkbox-transits"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-transits"]) . ",";
+    if (isset($_POST["checkbox-animaux"])) $data['checkbox'] .= htmlspecialchars($_POST["checkbox-animaux"]) . ",";
+
+    $query = "INSERT INTO `attestation`(`Prenom`, `Nom`, `DateDeNaissance`, `LieuDeNaissance`, `Adresse`, `Ville`, `CodePostal`, `DateDeSortie`, `HeureDeSortie`, `Motif`) VALUES (:firstname, :lastname, :birthday, :placeofbirth, :address, :city, :zipcode, :datesortie, :heuresortie, :checkbox)";
+
+    $success = $pdo->prepare($query)->execute($data);
 } else {
     echo '<h1 style="text-align:center; font-family:Arial, sans-serif;">Oups ! rien reçu du formulaire...</h1>';
 }

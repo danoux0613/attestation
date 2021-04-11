@@ -7,9 +7,10 @@
     body {
         margin: 200px;
         font-family: system-ui;
+        background-color: pink;
     }
     p {
-        color: pink;
+        color: #FFFFFF;
         font-family: 'SF UI Display Light';
         font-weight: normal;
     }
@@ -19,7 +20,7 @@
     h4,
     h5,
     h6 {
-        color: pink;
+        color: #FFFFFF;
         font-family: 'SF UI Display Light';
         font-weight: normal;
         text-align: center;
