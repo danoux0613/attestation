@@ -1,5 +1,5 @@
 <?php
-//Modifier l'action dans le "form" si l'on veut uniquement envoyer la requette sans generer de pdf 
+//Modifier l'action dans le "form" si l'on veut uniquement envoyer la requette sans generer de pdf
 $pdo = new PDO('mysql:host=localhost:3306;dbname=corona', 'daniel', 'EQuU1zodeqEhzlc3paSUNBbrUB');
 $data = [
     'firstname' => htmlspecialchars($_POST['firstname']),

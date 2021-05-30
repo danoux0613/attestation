@@ -30,7 +30,7 @@ if (
     $heuresortie = $_POST['heuresortie'];
     $motif_sorti = "";
 
-    //ici les checkbox etant cocher seron declarer
+    //ici les checkbox etant cochées seront declarées
     if (isset($_POST["checkbox-travail"])) $motif_sorti .= $_POST["checkbox-travail"] . ",";
     if (isset($_POST["checkbox-sante"])) $motif_sorti .= $_POST["checkbox-sante"] . ",";
     if (isset($_POST["checkbox-famille"])) $motif_sorti .= $_POST["checkbox-famille"] . ",";
@@ -52,7 +52,7 @@ if (
     // Ici on dessine le pdf
     $data = "";
 
-    // Ici on lui ajoute des "donnée"
+    // Ici on lui ajoute des "données"
     $data .= "<p></p>";
     $data .= '<h2>ATTESTATION DE DÉPLACEMENT DÉROGATOIRE</h2><h4>DURANT LES HORAIRES DU COUVRE-FEU</h4>
 
